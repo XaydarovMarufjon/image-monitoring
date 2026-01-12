@@ -1,0 +1,20 @@
+<div class="card">
+  <h2>Scan ID — #{{ scanId }}</h2>
+  <div *ngIf="loading">Yuklanmoqda...</div>
+
+  <div *ngIf="!loading">
+    <h3><strong>Topilgan rasmlar soni:</strong> {{ items.length }}</h3>
+
+    <div class="grid">
+      <div class="card-item" *ngFor="let it of items; let i = index">
+        <img [src]="it.imageUrl" alt="img" />
+        <div class="meta">
+          <div><strong>#{{ i + 1 }}</strong></div>
+          <div><strong>Label:</strong> {{ it.label }}</div>
+          <div><strong>Score:</strong> {{ it.score ?? '-' }}</div>
+          <div class="raw"><strong>Raw:</strong> <pre>{{ it.raw | json }}</pre></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

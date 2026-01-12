@@ -1,0 +1,16 @@
+<div class="card">
+  <h2>Oxirgi scanlar</h2>
+  <div *ngIf="loading">Yuklanmoqda...</div>
+  <table *ngIf="!loading">
+    <thead><tr><th>#</th><th>Site</th><th>Vaqt</th><th>Items</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let s of scans">
+        <td>{{ s.id }}</td>
+        <td>{{ s.siteUrl }}</td>
+        <td>{{ s.createdAt | date:'short' }}</td>
+        <td>{{ s._count?.items ?? '-' }}</td>
+        <td><a [routerLink]="['/scan', s.id]">Ko‘rish</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

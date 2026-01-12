@@ -1,0 +1,11 @@
+<div class="card">
+  <h2>Scan .uz sayt rasmlari</h2>
+  <p>Domain yoki to‘liq URL kiriting (masalan: https://example.uz)</p>
+
+  <div class="form">
+    <input [(ngModel)]="url" placeholder="https://example.uz" />
+    <button (click)="startScan()" [disabled]="loading()">Start Scan</button>
+  </div>
+
+  <div *ngIf="message()">{{ message() }}</div>
+</div>
