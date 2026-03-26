@@ -1,20 +1,90 @@
-<div class="card">
-  <h2>Scan ID — #{{ scanId }}</h2>
-  <div *ngIf="loading">Yuklanmoqda...</div>
+<h2>Scan natijalari</h2>
 
-  <div *ngIf="!loading">
-    <h3><strong>Topilgan rasmlar soni:</strong> {{ items.length }}</h3>
+<!-- 🔄 LOADING -->
+<div *ngIf="status() !== 'finished'" class="state loading">
+  <div class="spinner"></div>
+  <p>Sayt skan qilinmoqda... {{ progress() }}%</p>
+</div>
 
-    <div class="grid">
-      <div class="card-item" *ngFor="let it of items; let i = index">
-        <img [src]="it.imageUrl" alt="img" />
-        <div class="meta">
-          <div><strong>#{{ i + 1 }}</strong></div>
-          <div><strong>Label:</strong> {{ it.label }}</div>
-          <div><strong>Score:</strong> {{ it.score ?? '-' }}</div>
-          <div class="raw"><strong>Raw:</strong> <pre>{{ it.raw | json }}</pre></div>
-        </div>
+<!-- ❌ ERROR -->
+<div *ngIf="error()" class="state error">
+  <p>❌ Xatolik yuz berdi</p>
+  <small>{{ error() }}</small>
+</div>
+
+<!-- ✅ FINISHED -->
+<div *ngIf="status() === 'finished' && !error()">
+
+  <!-- 🎯 FILTER -->
+<div 
+  class="mode"
+  [ngClass]="{
+    'loose': threshold() < 0.3,
+    'medium': threshold() >= 0.3 && threshold() < 0.7,
+    'strict': threshold() >= 0.7
+  }"
+>
+  {{
+    threshold() >= 0.7 ? 'Strict (faqat aniq Xavfli rasmlar)' :
+    threshold() >= 0.3 ? 'Medium (Ehtiyotkorona, lekin ba’zi xavfli rasmlar ko‘rinmasligi mumkin)' :
+    'Loose (Hamma rasmlar ko‘rinadi)'
+  }}
+</div>
+<div class="slider-box">
+
+  <div class="slider-header">
+    <span>Filtr darajasi</span>
+    <span class="value">{{ threshold() | number:'1.2-2' }}</span>
+  </div>
+
+  <input
+    type="range"
+    min="0"
+    max="1"
+    step="0.05"
+    [value]="threshold()"
+    (input)="threshold.set($any($event.target).valueAsNumber)"
+    class="slider"
+  />
+
+  <div class="labels">
+    <span>Loose</span>
+    <span>Medium</span>
+    <span>Strict</span>
+  </div>
+
+</div>
+
+  <!-- ❗ EMPTY (UMUMAN YO‘Q) -->
+  <div *ngIf="items().length === 0" class="state empty">
+    <p>Ushbu saytda rasm topilmadi</p>
+  </div>
+
+  <!-- ❗ EMPTY (FILTER SABAB) -->
+  <div *ngIf="items().length > 0 && filteredItems().length === 0" class="state empty">
+    <h1>Xavfli (NSFW) rasmlar aniqlanmadi</h1>
+    <h3>Threshold qiymatini kamaytirib yana tekshirib ko‘ring ❗</h3>
+  </div>
+
+  <!-- 🖼 SUCCESS -->
+  <div *ngIf="filteredItems().length > 0" class="grid">
+    <div *ngFor="let i of filteredItems()" class="card">
+
+      <img [src]="i.imageUrl" />
+
+      <div class="info">
+        <p><b>{{ i.provider }}</b></p>
+        <h2><b>{{ i.label }}</b></h2>
+        <p>Score: {{ i.score | number:'1.2-2' }}</p>
+
+        <span [style.color]="
+          i.label === 'nsfw' ? 'red' :
+          i.label === 'error' ? 'purple' : 'green'  ">
+          {{ i.label === 'nsfw' ? 'Xavfli rasm 🔞'.toUpperCase()  : i.label === 'error' ? 'Tahlil xatolik bilan yakunlandi ⚠️' : 'Xavfsiz rasm ✅' }}
+        </span>
       </div>
+
     </div>
   </div>
+
 </div>

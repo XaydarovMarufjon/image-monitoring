@@ -1,4 +1,93 @@
-.card { max-width:900px; margin:auto; padding:16px; border-radius:8px; background:#fff; box-shadow:0 4px 18px rgba(0,0,0,.06); }
-.form { display:flex; gap:8px; margin-top:12px; }
-input { flex:1; padding:10px; border:1px solid #cbd5e1; border-radius:6px; }
-button { padding:10px 14px; background:#0ea5e9; color:white; border:none; border-radius:6px; cursor:pointer; }
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.card {
+    width: 40%;
+    padding: 30px;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.form {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+button {
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* messages */
+.message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.message.error {
+    background: #ffe5e5;
+    color: #c00;
+}
+
+.message.success {
+    background: #e6ffed;
+    color: #080;
+}
+
+/* spinner */
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 3px solid #fff;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* info */
+.info {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #777;
+}

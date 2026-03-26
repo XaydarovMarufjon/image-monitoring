@@ -1,41 +1,56 @@
 import { Component, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ScanService } from '../../services/scan.service';
-import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
   standalone: true,
+  selector: 'app-home',
   imports: [CommonModule, FormsModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+
   url = signal('');
-  images = signal<any[]>([]);
   loading = signal(false);
-  message = signal('');
-  progress = 0;
-  constructor(private scan: ScanService, private router: Router) { }
+  error = signal('');
+  success = signal('');
 
+  constructor(private scan: ScanService, private router: Router) { 
+    
+  }
 
-  startScan() {
-    // alert('Diqqat! Bu xizmat faqat .uz domenidagi saytlar uchun mo‘ljallangan. Boshqa domenlar qo‘llab-quvvatlanmaydi.');
-    const urlVal = this.url();
-    if (!urlVal) { this.message.set('URL kiriting'); return; }
+  
+
+  start() {
+    const val = this.url().trim();
+
+    if (!val) {
+      this.error.set('Iltimos, URL kiriting');
+      return;
+    }
+
+    if (!val.startsWith('http')) {
+      this.error.set('URL http yoki https bilan boshlanishi kerak');
+      return;
+    }
+
+    this.error.set('');
+    this.success.set('');
     this.loading.set(true);
-    this.message.set('');
-    this.scan.startScan(urlVal).subscribe({
+
+    this.scan.startScan(val).subscribe({
       next: (res) => {
-        this.message.set(`Scan started (id: ${res.scanId}), found ${res.total} images.`);
-        // avtomatik detailga o'tish
-        this.router.navigate(['/scan', res.scanId]);
+        this.success.set(`Scan boshlandi (ID: ${res.scanId})`);
+        setTimeout(() => {
+          this.router.navigate(['/scan', res.scanId]);
+        }, 800);
         this.loading.set(false);
       },
-      error: (err) => {
-        console.error(err);
-        this.message.set('Server bilan bog‘lanishda xatolik. Konsolni tekshiring.');
+      error: () => {
+        this.error.set('Server bilan bog‘lanishda xatolik');
         this.loading.set(false);
       }
     });

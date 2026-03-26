@@ -1,11 +1,45 @@
-<div class="card">
-  <h2>Scan .uz sayt rasmlari</h2>
-  <p>Domain yoki to‘liq URL kiriting (masalan: https://example.uz)</p>
+<div class="container">
 
-  <div class="form">
-    <input [(ngModel)]="url" placeholder="https://example.uz" />
-    <button (click)="startScan()" [disabled]="loading()">Start Scan</button>
+  <div class="card">
+
+    <h1>🔍 Web Image Scanner</h1>
+
+    <p class="subtitle">
+      Saytdagi rasmlarni tahlil qiladi va xavfli (NSFW) kontentni aniqlaydi
+    </p>
+
+    <!-- INPUT -->
+    <div class="form">
+      <input
+        [ngModel]="url()"
+        (ngModelChange)="url.set($event)"
+        placeholder="https://example.uz"
+      />
+
+      <button (click)="start()" [disabled]="loading()">
+        <span *ngIf="!loading()">Start Scan</span>
+        <span *ngIf="loading()" class="spinner"></span>
+      </button>
+    </div>
+
+    <!-- ERROR -->
+    <div *ngIf="error()" class="message error">
+      ❌ {{ error() }}
+    </div>
+
+    <!-- SUCCESS -->
+    <div *ngIf="success()" class="message success">
+      ✅ {{ success() }}
+    </div>
+
+    <!-- INFO -->
+    <div class="info">
+      <p>✔ .uz saytlar qo‘llab-quvvatlanadi</p>
+      <p>✔ AI orqali avtomatik tahlil</p>
+    </div>
+
+    <a href="http://localhost:8501">Dark Web (Robin)</a>
+
   </div>
 
-  <div *ngIf="message()">{{ message() }}</div>
 </div>
