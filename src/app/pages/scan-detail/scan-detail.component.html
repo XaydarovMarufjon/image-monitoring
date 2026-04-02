@@ -3,7 +3,14 @@
 <!-- 🔄 LOADING -->
 <div *ngIf="status() !== 'finished'" class="state loading">
   <div class="spinner"></div>
-  <p>Sayt skan qilinmoqda... {{ progress() }}%</p>
+
+  <h3>{{ stage() | uppercase }}</h3>
+
+  <p>{{ progress() }}%</p>
+
+  <div class="progress-box">
+    <div class="progress-bar" [style.width.%]="progress()"></div>
+  </div>
 </div>
 
 <!-- ❌ ERROR -->
@@ -16,44 +23,34 @@
 <div *ngIf="status() === 'finished' && !error()">
 
   <!-- 🎯 FILTER -->
-<div 
-  class="mode"
-  [ngClass]="{
+  <div class="mode" [ngClass]="{
     'loose': threshold() < 0.3,
     'medium': threshold() >= 0.3 && threshold() < 0.7,
     'strict': threshold() >= 0.7
-  }"
->
-  {{
+  }">
+    {{
     threshold() >= 0.7 ? 'Strict (faqat aniq Xavfli rasmlar)' :
     threshold() >= 0.3 ? 'Medium (Ehtiyotkorona, lekin ba’zi xavfli rasmlar ko‘rinmasligi mumkin)' :
     'Loose (Hamma rasmlar ko‘rinadi)'
-  }}
-</div>
-<div class="slider-box">
-
-  <div class="slider-header">
-    <span>Filtr darajasi</span>
-    <span class="value">{{ threshold() | number:'1.2-2' }}</span>
+    }}
   </div>
+  <div class="slider-box">
 
-  <input
-    type="range"
-    min="0"
-    max="1"
-    step="0.05"
-    [value]="threshold()"
-    (input)="threshold.set($any($event.target).valueAsNumber)"
-    class="slider"
-  />
+    <div class="slider-header">
+      <span>Filtr darajasi</span>
+      <span class="value">{{ threshold() | number:'1.2-2' }}</span>
+    </div>
 
-  <div class="labels">
-    <span>Loose</span>
-    <span>Medium</span>
-    <span>Strict</span>
+    <input type="range" min="0" max="1" step="0.05" [value]="threshold()"
+      (input)="threshold.set($any($event.target).valueAsNumber)" class="slider" />
+
+    <div class="labels">
+      <span>Loose</span>
+      <span>Medium</span>
+      <span>Strict</span>
+    </div>
+
   </div>
-
-</div>
 
   <!-- ❗ EMPTY (UMUMAN YO‘Q) -->
   <div *ngIf="items().length === 0" class="state empty">
@@ -80,7 +77,8 @@
         <span [style.color]="
           i.label === 'nsfw' ? 'red' :
           i.label === 'error' ? 'purple' : 'green'  ">
-          {{ i.label === 'nsfw' ? 'Xavfli rasm 🔞'.toUpperCase()  : i.label === 'error' ? 'Tahlil xatolik bilan yakunlandi ⚠️' : 'Xavfsiz rasm ✅' }}
+          {{ i.label === 'nsfw' ? 'Xavfli rasm 🔞'.toUpperCase() : i.label === 'error' ? 'Tahlil xatolik bilan
+          yakunlandi ⚠️' : 'Xavfsiz rasm ✅' }}
         </span>
       </div>
 
