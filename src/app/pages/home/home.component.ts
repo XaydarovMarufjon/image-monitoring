@@ -32,7 +32,15 @@ export class HomeComponent {
       return;
     }
 
-    if (!val.startsWith('http')) {
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(val);
+    } catch {
+      this.error.set('Iltimos, to‘g‘ri URL kiriting');
+      return;
+    }
+
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
       this.error.set('URL http yoki https bilan boshlanishi kerak');
       return;
     }
