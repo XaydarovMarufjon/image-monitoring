@@ -38,6 +38,20 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
+### Rendering scan detail pages
+
+`scan/:id` uses client-side rendering because scan IDs are created at runtime and
+the page listens for live scan progress. It must stay ahead of the wildcard
+prerender route in `src/app/app.routes.server.ts`; no build-time list of scan IDs
+is needed. The remaining routes keep their existing prerendering behavior.
+
+Run `npm run build` to verify route extraction and prerendering together. The
+focused routing specs can be run with:
+
+```bash
+npm test -- --watch=false --browsers=ChromeHeadless --include=src/app/app.routes.server.spec.ts
+```
+
 ## Running unit tests
 
 
