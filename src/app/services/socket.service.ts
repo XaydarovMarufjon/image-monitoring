@@ -7,5 +7,6 @@ export class SocketService {
 
     onProgress(cb: (data: any) => void) {
         this.socket.on('scan-progress', cb);
+        return () => this.socket.off('scan-progress', cb);
     }
 }
