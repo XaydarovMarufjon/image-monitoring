@@ -1,7 +1,12 @@
 <div class="card">
   <h2>Oxirgi scanlar</h2>
-  <div *ngIf="loading">Yuklanmoqda...</div>
-  <table *ngIf="!loading">
+  <div *ngIf="loading" role="status">Yuklanmoqda...</div>
+  <div *ngIf="!loading && error">
+    <p role="alert">{{ error }}</p>
+    <button type="button" (click)="load()">Qayta urinish</button>
+  </div>
+  <p *ngIf="!loading && !error && scans.length === 0" role="status">Hali scanlar yo‘q</p>
+  <table *ngIf="!loading && !error && scans.length > 0">
     <thead><tr><th>#</th><th>Site</th><th>Vaqt</th><th>Items</th><th>Detail</th></tr></thead>
     <tbody>
       <tr *ngFor="let s of scans">
